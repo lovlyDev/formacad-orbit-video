@@ -1,0 +1,41 @@
+name: Build and release
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: lovlyDev/FormaCAD
+          path: formacad
+          sparse-checkout: plugins/tools/cadplugin
+      - uses: dtolnay/rust-toolchain@1.97.1
+        with:
+          targets: wasm32-unknown-unknown
+      - run: cargo test --locked
+      - run: cargo build --locked --release --target wasm32-unknown-unknown
+      - run: cargo run --release --manifest-path formacad/plugins/tools/cadplugin/Cargo.toml -- pack --manifest manifest.json --wasm target/wasm32-unknown-unknown/release/orbit_video.wasm --dir . --out dist
+      - name: Tag matches manifest version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: test "v$(jq -r .version manifest.json)" = "$GITHUB_REF_NAME"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cadplugin
+          path: dist/*.cadplugin
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          sha256sum dist/*.cadplugin
+          gh release create "$GITHUB_REF_NAME" dist/orbit-video-$version.cadplugin \
+            --title "Видео вращения $version" \
+            --notes-file "docs/releases/$version.md"

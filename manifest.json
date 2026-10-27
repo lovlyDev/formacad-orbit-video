@@ -1,0 +1,316 @@
+{
+  "id": "orbit-video",
+  "name": "%name%",
+  "version": "1.0.0",
+  "description": "%description%",
+  "about": "Records a smooth turntable video of the model shown in the 3D view: choose frame size, frame rate, length or number of turns, which axis points up, tilt, camera height, framing, background and MP4/WebM. FormaCAD renders every frame itself, so the video is smooth even on a slow computer, and the plugin never sees your geometry or files.",
+  "highlights": [
+    {
+      "icon": "rotate-3d",
+      "label": "Turntable"
+    },
+    {
+      "icon": "film",
+      "label": "MP4 / WebM"
+    },
+    {
+      "icon": "monitor-play",
+      "label": "Up to 4K, 120 fps"
+    },
+    {
+      "icon": "shield-check",
+      "label": "No model access"
+    }
+  ],
+  "categories": [
+    "import-export",
+    "ui"
+  ],
+  "author": {
+    "name": "lovlyDev",
+    "github": "lovlyDev"
+  },
+  "repository": "https://github.com/lovlyDev/formacad-orbit-video",
+  "license": "MIT",
+  "icon": "icon.png",
+  "iconColor": "#7c3aed",
+  "screenshots": [
+    {
+      "src": "docs/screenshots/frames-dark.png",
+      "caption": "Turntable frames / Кадры вращения",
+      "theme": "dark"
+    },
+    {
+      "src": "docs/screenshots/form-dark-ru.png",
+      "caption": "Recording settings / Параметры записи",
+      "theme": "dark"
+    },
+    {
+      "src": "docs/screenshots/form-light-en.png",
+      "caption": "Recording settings / Параметры записи",
+      "theme": "light"
+    }
+  ],
+  "minAppVersion": "1.5.0",
+  "api": "0.2",
+  "entry": "plugin.wasm",
+  "permissions": [
+    "viewport.capture"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "id": "record",
+        "title": "%command%",
+        "icon": "video",
+        "when": "model",
+        "params": [
+          {
+            "key": "resolution",
+            "type": "choice",
+            "label": "%resolution%",
+            "default": "1080p",
+            "options": [
+              {
+                "value": "720p",
+                "label": "%res720%"
+              },
+              {
+                "value": "1080p",
+                "label": "%res1080%"
+              },
+              {
+                "value": "1440p",
+                "label": "%res1440%"
+              },
+              {
+                "value": "2160p",
+                "label": "%res2160%"
+              },
+              {
+                "value": "square",
+                "label": "%resSquare%"
+              },
+              {
+                "value": "vertical",
+                "label": "%resVertical%"
+              },
+              {
+                "value": "custom",
+                "label": "%resCustom%"
+              }
+            ]
+          },
+          {
+            "key": "width",
+            "type": "integer",
+            "label": "%width%",
+            "help": "%customHelp%",
+            "default": 1920,
+            "min": 160,
+            "max": 3840
+          },
+          {
+            "key": "height",
+            "type": "integer",
+            "label": "%height%",
+            "help": "%customHelp%",
+            "default": 1080,
+            "min": 120,
+            "max": 2160
+          },
+          {
+            "key": "fps",
+            "type": "choice",
+            "label": "%fps%",
+            "default": "30",
+            "options": [
+              {
+                "value": "12",
+                "label": "12"
+              },
+              {
+                "value": "24",
+                "label": "24"
+              },
+              {
+                "value": "25",
+                "label": "25"
+              },
+              {
+                "value": "30",
+                "label": "30"
+              },
+              {
+                "value": "50",
+                "label": "50"
+              },
+              {
+                "value": "60",
+                "label": "60"
+              },
+              {
+                "value": "120",
+                "label": "120"
+              }
+            ]
+          },
+          {
+            "key": "durationSec",
+            "type": "number",
+            "label": "%duration%",
+            "default": 8,
+            "min": 0.5,
+            "max": 600
+          },
+          {
+            "key": "turns",
+            "type": "number",
+            "label": "%turns%",
+            "help": "%turnsHelp%",
+            "default": 1,
+            "min": 0.05,
+            "max": 100
+          },
+          {
+            "key": "direction",
+            "type": "choice",
+            "label": "%direction%",
+            "default": "ccw",
+            "options": [
+              {
+                "value": "ccw",
+                "label": "%ccw%"
+              },
+              {
+                "value": "cw",
+                "label": "%cw%"
+              }
+            ]
+          },
+          {
+            "key": "up",
+            "type": "choice",
+            "label": "%up%",
+            "help": "%upHelp%",
+            "default": "z",
+            "options": [
+              {
+                "value": "z",
+                "label": "%upZ%"
+              },
+              {
+                "value": "-z",
+                "label": "%upMinusZ%"
+              },
+              {
+                "value": "y",
+                "label": "%upY%"
+              },
+              {
+                "value": "-y",
+                "label": "%upMinusY%"
+              },
+              {
+                "value": "x",
+                "label": "%upX%"
+              },
+              {
+                "value": "-x",
+                "label": "%upMinusX%"
+              }
+            ]
+          },
+          {
+            "key": "tilt",
+            "type": "angle",
+            "label": "%tilt%",
+            "help": "%tiltHelp%",
+            "default": 0,
+            "min": -90,
+            "max": 90
+          },
+          {
+            "key": "elevation",
+            "type": "angle",
+            "label": "%elevation%",
+            "help": "%elevationHelp%",
+            "default": 20,
+            "min": -89,
+            "max": 89
+          },
+          {
+            "key": "startAngle",
+            "type": "angle",
+            "label": "%startAngle%",
+            "default": 0,
+            "min": -360,
+            "max": 360
+          },
+          {
+            "key": "zoom",
+            "type": "number",
+            "label": "%zoom%",
+            "help": "%zoomHelp%",
+            "default": 1,
+            "min": 0.25,
+            "max": 4
+          },
+          {
+            "key": "background",
+            "type": "choice",
+            "label": "%background%",
+            "default": "theme",
+            "options": [
+              {
+                "value": "theme",
+                "label": "%bgTheme%"
+              },
+              {
+                "value": "light",
+                "label": "%bgLight%"
+              },
+              {
+                "value": "dark",
+                "label": "%bgDark%"
+              }
+            ]
+          },
+          {
+            "key": "format",
+            "type": "choice",
+            "label": "%format%",
+            "default": "mp4",
+            "options": [
+              {
+                "value": "mp4",
+                "label": "%formatMp4%"
+              },
+              {
+                "value": "webm",
+                "label": "%formatWebm%"
+              }
+            ]
+          },
+          {
+            "key": "bitrateKbps",
+            "type": "integer",
+            "label": "%bitrate%",
+            "help": "%bitrateHelp%",
+            "default": 0,
+            "min": 0,
+            "max": 200000
+          }
+        ]
+      }
+    ]
+  },
+  "links": {
+    "homepage": "https://github.com/lovlyDev/formacad-orbit-video",
+    "issues": "https://github.com/lovlyDev/formacad-orbit-video/issues"
+  },
+  "locales": [
+    "en",
+    "ru"
+  ]
+}

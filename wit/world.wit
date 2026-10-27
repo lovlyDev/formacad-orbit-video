@@ -1,0 +1,8 @@
+package lovlydev:orbit-video;
+
+// Everything the host may provide; only what the code calls becomes an import
+// (here: assets, log and viewport).
+world orbit-video {
+    include formacad:plugin/host@0.1.0;
+    export formacad:plugin/command@0.1.0;
+}
